@@ -1,1 +1,1 @@
-include ':library'
+include ':tiny-android-mvp', ':sample'

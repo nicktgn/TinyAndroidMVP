@@ -13,7 +13,18 @@ Suggested architecture is loosely based on the following sources:
 * [Ted Mosby - Software Architect: MVP for Android](http://hannesdorfmann.com/android/mosby/)
 
 ### Usage:
-#TODO
+***Gradle:***
+
+Add the following to your `build.gradle` file:
+```
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.github.nicktgn.mvp:tiny-android-mvp:0.1.2@aar'
+}
+```
 
 ### License:
 ```

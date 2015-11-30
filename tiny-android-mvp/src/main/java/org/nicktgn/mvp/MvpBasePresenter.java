@@ -32,9 +32,7 @@ public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresente
 	private WeakReference<IContext> contextRef;
 
 	@Override
-	public Bundle getModelData(){
-		return null;
-	}
+	abstract public Bundle getModelData();
 
 	@Override
 	public void attachView(V view, Bundle cachedData, IContext context) {
@@ -50,6 +48,18 @@ public abstract class MvpBasePresenter<V extends MvpView> implements MvpPresente
 	 * @param cachedData saved state of Presenter
 	 */
 	abstract protected void present(Bundle cachedData);
+
+	/**
+	 * Override this if you need Presenter to present complex sub Views. Can be used with Adapters, in
+	 * particular with {@link android.support.v7.widget.RecyclerView} and its
+	 * {@link android.support.v7.widget.RecyclerView.ViewHolder}. See README for the sample on how
+	 * to use sub Views with Adapters.
+	 * @param view	interface of the sub View to present
+	 * @param index index of the sub View
+	 */
+	public void presentSubView(MvpView view, int index){
+		throw new UnsupportedOperationException("Method is not implemented. Override it in your Presenter subclass.");
+	}
 
 	/**
 	 * Returns the reference to the Context of the View

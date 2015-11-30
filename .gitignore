@@ -2,6 +2,7 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/gradle/wrapper/gradle-2.4-all.zip
 .DS_Store
 /build
 /captures
