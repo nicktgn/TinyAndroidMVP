@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+ * Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp;
+package com.github.nicktgn.mvp_sample.presensters;
+
+import static org.junit.Assert.*;
+
+public class NotebookPresenterTest {
 
 
-/**
- * Basic View interface
- * @author nicktgn
- */
-public interface MvpView {
 
 }

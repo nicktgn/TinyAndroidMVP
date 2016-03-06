@@ -19,48 +19,98 @@ package com.github.nicktgn.mvp;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.github.nicktgn.mvp.android.ContextWrapper;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 /**
- * Abstract helper implementation of the View based on {@link AppCompatActivity}. Actual view
+ * Abstract helper implementation of the View based on {@link Activity}. Actual view
  * activities can extend from this class.
  * @author nicktgn
  */
-public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter> extends Activity implements MvpView {
+public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
+							extends Activity
+							implements MvpView {
 
-	private static final String MODEL_DATA = "model_data";
+	private static final Logger logger = LoggerManager.getLogger(MvpActivity.class.getName());
 
 	protected P presenter;
 
-	private Bundle savedData;
+	private MvpBundle argumentsData;
+	private MvpBundle stateData;
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		presenter = createPresenter();
 
-		savedData = null;
-		if(savedInstanceState != null){
-			savedData = savedInstanceState.getBundle(MODEL_DATA);
+		// ---- INPUT ARGUMENTS ---- //
+		// try to get input model data from Intent (that started this Activity)
+		try {
+			Bundle bundle = getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
+			if(bundle != null){
+				argumentsData = new MvpBundle(bundle);
+				logger.d("Got some arguments data");
+			}
+		} catch(NullPointerException e){
+			logger.d("No intent data");
 		}
+
+		// ---- CACHING ---- //
+		// if we have savedInstanceState (activity was re-created)
+		if(savedInstanceState != null){
+			Bundle bundle = savedInstanceState.getBundle(Constants.CACHED_STATE_DATA);
+			if(bundle != null){
+				stateData = new MvpBundle(bundle);
+				logger.d("Got some cached state data");
+			}
+		}
+	}
+
+	/**
+	 * By default view attaches itself in onStart() and detaches itself in onStop().
+	 * You can override this method to change this behaviour and instead to attach in
+	 * onResume() and detach in onPause()
+	 * @return true to attach in onResume() and detach in onPause()
+	 */
+	protected boolean attachOnResume(){
+		return false;
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 
-		// View is attached in onStart() because in attachView we already need all the elements of the View
-		// need to be prepared for use (usually done in onCreate()).
-		// Because we attach in onStart() but detach in onDestroy(), it is also useful to check if
-		// the view has not been attached yet, as the activity can be stopped and started again without
-		// destroying it in the process.
-		if(!presenter.isViewAttached()) {
-			presenter.attachView(this, savedData, new ContextWrapper(this));
+		if(!attachOnResume()){
+			// View is attached in onStart() or in onResume() because in attachView() we already need all the elements of the View
+			// need to be prepared for use (usually done in onCreate()).
+			presenter.attachView(this, argumentsData, stateData);
 		}
 	}
 
-	@Override protected void onDestroy() {
-		super.onDestroy();
-		presenter.detachView(false);
+	@Override
+	protected void onResume(){
+		super.onResume();
+
+		if(attachOnResume()){
+			// View is attached in onStart() or in onResume() because in attachView() we already need all the elements of the View
+			// need to be prepared for use (usually done in onCreate()).
+			presenter.attachView(this, argumentsData, stateData);
+		}
+	}
+
+	@Override
+	protected void onPause(){
+		if(attachOnResume()){
+			presenter.detachView(false);
+		}
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		if(!attachOnResume()){
+			presenter.detachView(false);
+		}
+		super.onStop();
 	}
 
 	/**
@@ -71,9 +121,9 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter> ext
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Bundle savedData = presenter.getModelData();
+		MvpBundle savedData = presenter.saveState();
 		if(savedData != null){
-			outState.putBundle(MODEL_DATA, savedData);
+			outState.putBundle(Constants.CACHED_STATE_DATA, savedData.getRealBundle());
 		}
 		super.onSaveInstanceState(outState);
 	}

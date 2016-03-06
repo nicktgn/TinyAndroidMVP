@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/title_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"
+            android:lines="1"
+            android:maxLines="1"
+            android:inputType="textNoSuggestions"
+            android:hint="Title"
+            />
+        <!--
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+        -->
+
+        <EditText
+            android:id="@+id/content_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:hint="Content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at malesuada mauris. Curabitur dictum tincidunt tortor, vel vehicula tellus hendrerit quis. In in felis enim. In erat mi, efficitur eu venenatis sed, vestibulum eu urna. Vivamus maximus tellus non dapibus lobortis. Aenean pellentesque tellus sed sagittis semper. Donec congue tellus at mauris hendrerit vestibulum. Aliquam erat volutpat.">
+
+        </EditText>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_tools"
+        android:background="@color/accent"
+        >
+
+        <android.support.v7.widget.ActionMenuView
+            android:id="@+id/edit_tools_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"/>
+
+    </android.support.v7.widget.Toolbar>
+
+</LinearLayout>

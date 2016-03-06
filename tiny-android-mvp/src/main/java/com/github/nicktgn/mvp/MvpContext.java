@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp_sample.controllers;
+package com.github.nicktgn.mvp;
 
 /**
- * Created by nick on 11/30/15.
+ * Abstract interface for Android context
+ * Used for mocking, instead of having dependency on Android's MockContext
+ * @author nicktgn
  */
-public class Calculator {
-
-	private static Calculator mInstance = null;
-
-	private Calculator(){}
-
-	public Calculator getInstance(){
-		if(mInstance == null){
-			mInstance = new Calculator();
-		}
-		return mInstance;
-	}
+public interface MvpContext {
 
 }

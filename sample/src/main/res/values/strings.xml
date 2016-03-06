@@ -15,5 +15,18 @@
   -->
 
 <resources>
-    <string name="app_name">TinyAndroidMVP</string>
+    <string name="app_name">MVP Notepad</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="action_settings">Settings</string>
+  <string name="action_create_new_notebook">Create new notebook</string>
+  <string name="action_new_notebook">New notebook</string>
+  <string name="action_create_new_note">Create new note</string>
+  <string name="action_new_note">New note</string>
+  <string name="default_note_name">Untitled</string>
+  <string name="default_notebook_name">New notebook</string>
+  <string name="action_undo">Undo</string>
+  <string name="action_redo">Redo</string>
+
 </resources>

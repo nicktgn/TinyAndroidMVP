@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+ * Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package com.github.nicktgn.mvp;
 
+public class Constants {
 
-/**
- * Basic View interface
- * @author nicktgn
- */
-public interface MvpView {
+	static final String CACHED_STATE_DATA = "com.github.nicktgn.mvp.CACHED_STATE_DATA";
+	static final String ARGUMENTS_DATA = "com.github.nicktgn.mvp.CACHED_ARGUMENTS_DATA";
 
 }

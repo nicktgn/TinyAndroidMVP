@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+ * Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp;
+package com.github.nicktgn.mvp_sample;
 
+import android.app.Application;
+
+import de.greenrobot.event.EventBus;
 
 /**
- * Basic View interface
- * @author nicktgn
+ * Created by nick on 3/2/16.
  */
-public interface MvpView {
+public class SampleApplication extends Application{
 
+	private static EventBus presenterBus;
+
+	public static final EventBus getPresenterBus(){
+		if(presenterBus == null){
+			presenterBus = new EventBus();
+		}
+		return presenterBus;
+	}
 }

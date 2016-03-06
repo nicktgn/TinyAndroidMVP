@@ -25,10 +25,33 @@ import android.os.Bundle;
 public interface MvpPresenter<V extends MvpView> {
 
 	/**
-	 * Get the Bundle with Model data operated by Presenter.
-	 * This Bundle can be used to save/restore Model data between destruction and re-creation of
+	 * Read arguments intended for Presenter. These arguments for example can be passed
+	 * between Presenters in different Views through {@link android.content.Intent} that starts
+	 * another View (in case if View is {@link android.app.Activity}) or through arguments of
+	 * {@link android.support.v4.app.Fragment}, etc. <br/>
+	 * Common places to use this:<br/>
+	 * <ul>
+	 *    <li>In Activities:
+	 *    	<ul>
+	 *    		<li>{@link android.app.Activity#onCreate(Bundle)}</li>
+	 *    	</ul>
+	 *    </li>
+	 *    <li>In Fragments:
+	 *    	<ul>
+	 *    	 	<li>{@link android.app.Fragment#onActivityCreated(Bundle)}</li>
+	 *    	</ul>
+	 *    </li>
+	 * </ul
+	 * @param arguments {@link Bundle} with arguments
+	 */
+	//void readArguments(Bundle arguments);
+
+
+	/**
+	 * Get the {@link Bundle} with state data operated by Presenter.
+	 * This {@link Bundle} can be used to save/restore Model data between destruction and re-creation of
 	 * the Views. <br/>
-	 * See README or source of {@link MvpAppCompatActivity} and {@link MvpFragment} for
+	 * See source of {@link MvpAppCompatActivity} and {@link MvpFragment} for
 	 * an example of how to save/restore Presenter state. <br/>
 	 * Common places to use this:<br/>
 	 * <ul>
@@ -46,9 +69,9 @@ public interface MvpPresenter<V extends MvpView> {
 	 *    	</ul>
 	 *    </li>
 	 * </ul
-	 * @return Bundle with Model data
+	 * @return {@link MvpBundle} with cached state data
 	 */
-	Bundle getModelData();
+	MvpBundle saveState();
 
 	/**
 	 * Usually is called after the View has been created and it is ready to be attached to Presenter
@@ -62,19 +85,17 @@ public interface MvpPresenter<V extends MvpView> {
 	 *    {@link MvpPresenter#isViewAttached()} first to check that it has not been attached yet.</li>
 	 * </ul>
 	 * @param view View related to this Presenter
-	 * @param cachedData saved state of the Model data used by this Presenter, if any
-	 * @param context abstract Context interface
+	 * @param arguments input arguments (if any)  provided to this Presenter
+	 * @param savedState saved state of this Presenter (if any), or input arguments intended for this Presenter (if any)
 	 */
-	void attachView(V view, Bundle cachedData, IContext context);
+	void attachView(V view, MvpBundle arguments, MvpBundle savedState);
 
 	/**
 	 * Usually is called before the View is going to be destroyed.<br/>
 	 * Common places to invoke this:<br/>
 	 * <ul>
-	 *    <li>{@link android.app.Activity#onStart()}; make sure to call
-	 *    {@link MvpPresenter#isViewAttached()} first to check that it has not been attached yet.</li>
-	 *    <li>{@link android.app.Fragment#onActivityCreated(Bundle)}; make sure to call
-	 *    {@link MvpPresenter#isViewAttached()} first to check that it has not been attached yet.</li>
+	 *    <li>{@link android.app.Activity#onStop()};
+	 *    <li>{@link android.app.Fragment#onDestroy()};
 	 * </ul>
 	 * @param retainInstance indicates whether the View instance will be retained: can be useful in
 	 *                       case of Fragments ({@link android.app.Fragment#setRetainInstance(boolean)})

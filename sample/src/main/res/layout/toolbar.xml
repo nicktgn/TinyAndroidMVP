@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
-  ~ Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+  ~ Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,13 +16,19 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <color name="primary">#FFC107</color>
-  <color name="primary_dark">#FFA000</color>
-  <color name="primary_light">#FFECB3</color>
-  <color name="accent">#607D8B</color>
-  <color name="primary_text">#212121</color>
-  <color name="secondary_text">#727272</color>
-  <color name="icons">#212121</color>
-  <color name="divider">#B6B6B6</color>
-</resources>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:minHeight="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/primary"/>
+
+
+</merge>
+
+

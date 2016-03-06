@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+  ~ Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,14 +15,17 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/accent</item>
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-    </style>
 
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:editTextStyle">@android:style/Widget.EditText</item>
+    </style>
 </resources>

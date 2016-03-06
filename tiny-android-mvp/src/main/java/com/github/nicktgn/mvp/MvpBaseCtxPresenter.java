@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+ * Copyright 2016 Nick Tsygankov (nicktgn@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,38 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp_sample.controllers;
+package com.github.nicktgn.mvp;
 
-import org.junit.Test;
+import java.lang.ref.WeakReference;
 
 /**
- * Created by nick on 11/30/15.
+ * Created by nick on 1/22/16.
  */
-public class CalculatorTest {
+public abstract class MvpBaseCtxPresenter<V extends MvpView, C extends MvpContext>
+										 extends MvpBasePresenter<V> {
 
-	@Test
-	public void shouldAddTwoNumbers(){
+	WeakReference<C> contextRef;
 
+	public MvpBaseCtxPresenter(C context){
+		contextRef = new WeakReference<C>(context);
 	}
 
-	@Test
-	public void shouldSubtractTwoNumbers(){
-
-	}
-
-	@Test
-	public void shouldMultiplyTwoNumbers(){
-
-	}
-
-	@Test
-	public void shouldDivideTwoNumbers(){
-
-	}
-
-	@Test
-	public void shouldExponentiate(){
-
+	/**
+	 * Returns the reference to the Context of the View
+	 * @return Context interface reference
+	 */
+	protected C getContext(){
+		return contextRef == null ? null : contextRef.get();
 	}
 
 }

@@ -35,21 +35,59 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+//Test Logging
+tasks.withType(Test) {
+
+    //beforeTest { descriptor ->
+    //    logger.lifecycle("Running test: " + descriptor)
+    //}
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.0.31-beta'
+    testCompile 'org.mockito:mockito-core:2.0.43-beta'
+    testCompile 'org.assertj:assertj-core:1.7.1'
 
-    androidTestCompile 'com.android.support:support-annotations:23.0.1'
+    androidTestCompile 'com.android.support:support-annotations:23.1.1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2') {
+        // Necessary to avoid version conflicts
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
     // Set this dependency if you want to use Hamcrest matching
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    //androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
 
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    // https://github.com/square/assertj-android
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'
 
     compile project(':tiny-android-mvp')
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+
+    compile 'de.greenrobot:eventbus:2.4.0'
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    compile 'com.noveogroup.android:android-logger-multi:1.4.0-multi'
 }

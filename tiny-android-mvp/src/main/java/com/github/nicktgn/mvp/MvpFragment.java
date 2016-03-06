@@ -18,8 +18,10 @@ package com.github.nicktgn.mvp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
-import com.github.nicktgn.mvp.android.ContextWrapper;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 /**
  * Abstract helper implementation of the View based on {@link Fragment}. Actual view
@@ -27,53 +29,92 @@ import com.github.nicktgn.mvp.android.ContextWrapper;
  * @author nicktgn
  */
 public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter> extends Fragment implements MvpView {
-
-	private static final String MODEL_DATA = "model_data";
-
+	private static final Logger logger = LoggerManager.getLogger(MvpAppCompatActivity.class.getName());
+	
 	protected P presenter;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		logger.d("onActivityCreated");
 		presenter = createPresenter();
 
-		Bundle savedData;
-		// we have savedInstanceState (activity was re-created)
-		if(savedInstanceState != null){
-			savedData = savedInstanceState.getBundle(MODEL_DATA);
+		MvpBundle stateData = null;
+		MvpBundle argumentsData = null;
+
+		// ---- INPUT ARGUMENTS ---- //
+		try {
+			// first try to get input model data from fragment arguments
+			// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
+			// through presenter's constructor for example
+
+			Bundle bundle = getArguments().getBundle(Constants.ARGUMENTS_DATA);
+			if(bundle != null) {
+				argumentsData = new MvpBundle(bundle);
+				logger.d("Got arguments data from fragment arguments");
+			}
+
+			// if noting found in arguments, try to get input model data from Intent
+			// (that started Activity hosting this Fragment)
+			// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
+			// through presenter's constructor for example
+			else{
+				bundle = getActivity().getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
+				if(bundle != null) {
+					argumentsData = new MvpBundle(bundle);
+					logger.d("Got argumnets data from intent");
+				}
+			}
+		} catch(NullPointerException e){
+			logger.d("No arguments data");
 		}
+
+		// ---- CACHING ---- //
+		// if we have savedInstanceState (activity was re-created)
+		if(savedInstanceState != null){
+			Bundle bundle = savedInstanceState.getBundle(Constants.CACHED_STATE_DATA);
+			if(bundle != null){
+				stateData = new MvpBundle(bundle);
+				logger.d("Got cached state data from instance state");
+			}
+		}
+		// else this fragment is just created or came back from back stack
 		// try to restore presenter state from MvpState (cause fragment instance is still
 		// the same and only the view was re-created)
 		else{
-			savedData = MvpState.restoreState(this);
+			stateData = MvpState.restoreState(this);
+			if(stateData != null){
+				logger.d("Got cached data from mvp fragment state");
+			}
 		}
 
-		presenter.attachView(this, savedData, new ContextWrapper(this.getActivity()));
+		presenter.attachView(this, argumentsData, stateData);
 	}
 
 	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
+		logger.d("onDestroyView");
 
-		// in case the fragment is not destroyed (that is when activity is destroyed or config change)
+		// in case the fragment is not destroyed (that is when its returned from back stack)
 		//  and only view is recreated, save presenter state in MvpState (cause we retain fragment
 		// instance reference)
-		Bundle savedData = presenter.getModelData();
+		MvpBundle savedData = presenter.saveState();
 		if(savedData != null){
 			MvpState.saveState(this, savedData);
 		}
 
 		presenter.detachView(getRetainInstance());
+
+		super.onDestroyView();
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
-		Bundle savedData = presenter.getModelData();
+		MvpBundle savedData = presenter.saveState();
 		if(savedData != null){
-			// TODO: check if the outState bundle is the same instance as the one for activity or is it nested one
-			outState.putBundle(MODEL_DATA, savedData);
+			outState.putBundle(Constants.CACHED_STATE_DATA, savedData.getRealBundle());
 		}
 	}
 

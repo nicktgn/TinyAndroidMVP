@@ -14,22 +14,31 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp;
+package com.github.nicktgn.mvp_sample.models;
 
-import android.os.Bundle;
+public class NotebooksStorageManager {
 
-/**
- * Abstract interface for Android context
- * Used for mocking, instead of having dependency on Android's MockContext
- * @author nicktgn
- */
-public interface IContext {
+	private static NotebooksStorageManager mInstance = null;
 
-	/**
-	 * Launch a new activity
-	 * @param dest  intent
-	 * @param data  options
-	 */
-	void startActivity(Class<?> dest, Bundle data);
+	private NotebooksStorageManager(){
+
+	}
+
+	public static NotebooksStorageManager getInstance(){
+		if(mInstance == null){
+			mInstance = new NotebooksStorageManager();
+		}
+		return mInstance;
+	}
+
+	private NotebooksProvider mainModel;
+
+	public NotebooksProvider getMainModel(){
+		return mainModel;
+	}
+
+	public void addNotebook(){
+
+	}
 
 }

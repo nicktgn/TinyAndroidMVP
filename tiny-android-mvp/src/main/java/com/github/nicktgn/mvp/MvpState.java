@@ -25,16 +25,16 @@ import java.util.HashMap;
  * instance.
  * @author nicktgn
  */
-public class MvpState {
+public abstract class MvpState {
 
-	private static final HashMap<Object, Bundle> mStates = new HashMap<Object, Bundle>();
+	private static final HashMap<Object, MvpBundle> mStates = new HashMap<Object, MvpBundle>();
 
 	/**
 	 * Saves state of the Presenter
 	 * @param view View instance
-	 * @param state state of the Presenter obtained from {@link MvpPresenter#getModelData()}
+	 * @param state state of the Presenter obtained from {@link MvpPresenter#saveState()}
 	 */
-	public static void saveState(Object view, Bundle state){
+	public static void saveState(Object view, MvpBundle state){
 		mStates.put(view, state);
 	}
 
@@ -42,10 +42,10 @@ public class MvpState {
 	 * Returns saved state of the Presenter.
 	 * @param view View instance
 	 * @return state of the Presenter that can be provided to
-	 *         {@link MvpPresenter#attachView(MvpView, Bundle, IContext)} to restore the Presenter's
+	 *         {@link MvpPresenter#attachView(MvpView, MvpBundle, MvpBundle)} to restore the Presenter's
 	 *         state
 	 */
-	public static Bundle restoreState(Object view){
+	public static MvpBundle restoreState(Object view){
 		return mStates.get(view);
 	}
 
