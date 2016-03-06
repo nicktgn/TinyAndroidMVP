@@ -32,10 +32,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp.MvpFragment;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.NotebookPresenter;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -51,7 +54,7 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 										implements NotebookPresenter.NotebookView,
 														NotebookPresenter.NotebookCtx{
 
-	private static final String TAG = "NotebookFragmnet";
+	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
 	@Bind(R.id.add_new_note_btn) View mAddNoteBtn;
 	@Bind(R.id.notes_list_empty_view) View mNotesListEmptyView;
@@ -63,10 +66,6 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 
 
 	private NotesListAdapter mAdapter;
-
-	public NotebookFragment() {
-		// Required empty public constructor
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +89,7 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		Log.d(TAG, "adding actions");
+		logger.d("adding actions");
 		// Inflate the menu items for use in the action bar
 		inflater.inflate(R.menu.menu_notebook, menu);
 	}
@@ -136,9 +135,9 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 	}
 
 	public class EventOpenNote{
-		public Bundle noteModel;
-		public EventOpenNote(Bundle noteModel){
-			this.noteModel = noteModel;
+		public NoteFragment noteView;
+		public EventOpenNote(NoteFragment noteView){
+			this.noteView = noteView;
 		}
 	}
 
@@ -164,8 +163,8 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 	}
 
 	@Override
-	public void gotoNote(Bundle noteModel) {
-		EventBus.getDefault().post(new EventOpenNote(noteModel));
+	public void gotoNoteView(MvpBundle noteModel) {
+		EventBus.getDefault().post(new EventOpenNote(getMvpFragment(NoteFragment.class, noteModel)));
 	}
 
 	public class SpacesItemDecoration extends RecyclerView.ItemDecoration {

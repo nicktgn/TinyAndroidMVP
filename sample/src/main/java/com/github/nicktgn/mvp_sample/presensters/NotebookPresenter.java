@@ -23,8 +23,6 @@ import com.github.nicktgn.mvp.MvpView;
 import com.github.nicktgn.mvp_sample.models.NoteModel;
 import com.github.nicktgn.mvp_sample.models.NotebookModel;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
-import com.noveogroup.android.log.Logger;
-import com.noveogroup.android.log.LoggerManager;
 
 
 public class NotebookPresenter extends MvpBaseCtxPresenter<NotebookPresenter.NotebookView, NotebookPresenter.NotebookCtx> {
@@ -40,7 +38,7 @@ public class NotebookPresenter extends MvpBaseCtxPresenter<NotebookPresenter.Not
 	public interface NotebookView extends MvpView {
 		void showTitle(String title);
 		void showNotes(int numNotes);
-		void gotoNote(MvpBundle noteModel);
+		void gotoNoteView(MvpBundle noteModel);
 	}
 
 	public interface NoteView extends MvpView{
@@ -97,7 +95,7 @@ public class NotebookPresenter extends MvpBaseCtxPresenter<NotebookPresenter.Not
 		MvpBundle bundle = new MvpBundle();
 		bundle.putInt(NotePresenter.DATA_NOTE_IDX, index);
 		bundle.putInt(NotePresenter.DATA_NOTEBOOK_IDX, notebookIdx);
-		getView().gotoNote(bundle);
+		getView().gotoNoteView(bundle);
 	}
 
 	public void createNote(String defaultNoteName){
@@ -107,7 +105,7 @@ public class NotebookPresenter extends MvpBaseCtxPresenter<NotebookPresenter.Not
 		MvpBundle bundle = new MvpBundle();
 		bundle.putInt(NotePresenter.DATA_NOTE_IDX, mNotebook.getNumNotes() - 1);
 		bundle.putInt(NotePresenter.DATA_NOTEBOOK_IDX, notebookIdx);
-		getView().gotoNote(bundle);
+		getView().gotoNoteView(bundle);
 	}
 
 	public void deleteNote(int index){

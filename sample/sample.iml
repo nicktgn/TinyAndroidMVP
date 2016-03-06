@@ -95,8 +95,8 @@
     <orderEntry type="library" exported="" name="recyclerview-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="objenesis-2.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="assertj-core-1.7.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="byte-buddy-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="assertj-core-1.7.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="slf4j-api-1.7.12" level="project" />
     <orderEntry type="module" module-name="tiny-android-mvp" exported="" />

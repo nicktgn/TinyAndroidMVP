@@ -48,6 +48,8 @@ import android.view.MenuItem;
 import com.github.nicktgn.mvp.MvpActivity;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.presensters.MainPresenter;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +57,7 @@ import de.greenrobot.event.EventBus;
 
 public class NotebookActivity extends AppCompatActivity {
 
-	private static final String TAG = "NotebookActivity";
+	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
 	@Bind(R.id.toolbar) Toolbar mToolbar;
 
@@ -101,7 +103,7 @@ public class NotebookActivity extends AppCompatActivity {
 				if(fm.getBackStackEntryCount() == 0){
 					Intent upIntent = NavUtils.getParentActivityIntent(this);
 					if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-						Log.d(TAG, "Creating NEW TASK...");
+						logger.d("Creating NEW TASK...");
 						// This activity is NOT part of this app's task, so create a new task
 						// when navigating up, with a synthesized back stack.
 						TaskStackBuilder.create(this)
@@ -110,7 +112,7 @@ public class NotebookActivity extends AppCompatActivity {
 								// Navigate up to the closest parent
 							.startActivities();
 					} else {
-						Log.d(TAG, "Using SAME TASK...");
+						logger.d("Using SAME TASK...");
 						// This activity is part of this app's task, so simply
 						// navigate up to the logical parent activity.
 						//NavUtils.navigateUpTo(this, upIntent);
@@ -151,7 +153,7 @@ public class NotebookActivity extends AppCompatActivity {
 
 	public void onEvent(NotebookFragment.EventOpenNote evt){
 		// Create new fragment and transaction
-		Fragment noteFragment = NoteFragment.newInstance(evt.noteModel);
+		Fragment noteFragment = evt.noteView;
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(R.id.container, noteFragment);
 		transaction.addToBackStack(null);

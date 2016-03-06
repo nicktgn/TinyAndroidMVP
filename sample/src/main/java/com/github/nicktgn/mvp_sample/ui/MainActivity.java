@@ -17,12 +17,10 @@
 package com.github.nicktgn.mvp_sample.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,9 +29,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.nicktgn.mvp.MvpAppCompatActivity;
+import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.MainPresenter;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +43,7 @@ import butterknife.OnClick;
 public class MainActivity extends MvpAppCompatActivity<MainPresenter.MainView, MainPresenter>
 									implements MainPresenter.MainView {
 
-	private static final String TAG = "MainActivity";
+	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
 	@Bind(R.id.notebooks_list) RecyclerView mNotebooksList;
 	@Bind(R.id.num_notebooks_txt) TextView mNumNotebooksTxt;
@@ -96,7 +97,7 @@ public class MainActivity extends MvpAppCompatActivity<MainPresenter.MainView, M
 	protected void onDestroy(){
 		super.onDestroy();
 
-		Log.d(TAG, "on Destroy");
+		logger.d("on Destroy");
 	}
 
 	@Override
@@ -132,10 +133,8 @@ public class MainActivity extends MvpAppCompatActivity<MainPresenter.MainView, M
 	}
 
 	@Override
-	public void gotoNotebook(Bundle notebook) {
-		Intent i = new Intent(this, NotebookActivity.class);
-		i.putExtras(notebook);
-		startActivity(i);
+	public void gotoNotebookView(MvpBundle notebook) {
+		startActivity(getMvpIntent(NotebookActivity.class, notebook));
 	}
 
 	@OnClick(R.id.add_new_notebook_btn)

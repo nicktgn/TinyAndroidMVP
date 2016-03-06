@@ -78,7 +78,7 @@ public class MvpBundle {
 		}
 		try{
 			return (IBinder) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -89,7 +89,7 @@ public class MvpBundle {
 		}
 		try{
 			return (Bundle) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -100,7 +100,7 @@ public class MvpBundle {
 		}
 		try{
 			return (byte) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return 0;
 		}
 	}
@@ -112,7 +112,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (Byte) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e) {
 			return defaultValue;
 		}
 	}
@@ -123,7 +123,7 @@ public class MvpBundle {
 		}
 		try{
 			return (byte[]) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -134,7 +134,7 @@ public class MvpBundle {
 		}
 		try{
 			return (char) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return 0;
 		}
 	}
@@ -146,7 +146,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (char) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e) {
 			return defaultValue;
 		}
 	}
@@ -157,7 +157,7 @@ public class MvpBundle {
 		}
 		try{
 			return (char[]) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -170,7 +170,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (CharSequence) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e) {
 			return defaultValue;
 		}
 	}
@@ -181,7 +181,7 @@ public class MvpBundle {
 		}
 		try{
 			return (CharSequence) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -192,7 +192,7 @@ public class MvpBundle {
 		}
 		try{
 			return (CharSequence[]) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -203,7 +203,7 @@ public class MvpBundle {
 		}
 		try{
 			return (ArrayList<CharSequence>) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -218,7 +218,7 @@ public class MvpBundle {
 		}
 		try{
 			return (float) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return 0.0f;
 		}
 	}
@@ -230,7 +230,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (float) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e) {
 			return defaultValue;
 		}
 	}
@@ -241,7 +241,7 @@ public class MvpBundle {
 		}
 		try{
 			return (float[]) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -252,7 +252,7 @@ public class MvpBundle {
 		}
 		try{
 			return (ArrayList<Integer>) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -263,7 +263,7 @@ public class MvpBundle {
 		}
 		try{
 			return (T) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -274,7 +274,7 @@ public class MvpBundle {
 		}
 		try{
 			return (Parcelable[]) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -285,7 +285,7 @@ public class MvpBundle {
 		}
 		try{
 			return (ArrayList<T>) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -296,7 +296,7 @@ public class MvpBundle {
 		}
 		try{
 			return (Serializable) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -307,7 +307,7 @@ public class MvpBundle {
 		}
 		try{
 			return (short) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return 0;
 		}
 	}
@@ -319,7 +319,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (short) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -330,7 +330,7 @@ public class MvpBundle {
 		}
 		try{
 			return (short[]) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -342,7 +342,7 @@ public class MvpBundle {
 		}
 		try{
 			return (Size) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -354,7 +354,7 @@ public class MvpBundle {
 		}
 		try{
 			return (SizeF) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -365,7 +365,7 @@ public class MvpBundle {
 		}
 		try{
 			return (SparseArray<T>) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -376,7 +376,7 @@ public class MvpBundle {
 		}
 		try{
 			return (ArrayList<String>) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -866,7 +866,7 @@ public class MvpBundle {
 		}
 		try{
 			return (boolean) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return false;
 		}
 	}
@@ -887,7 +887,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (boolean) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -905,7 +905,7 @@ public class MvpBundle {
 		}
 		try{
 			return (int) stub.get(key);
-		} finally {
+		} catch(Exception e) {
 			return 0;
 		}
 	}
@@ -925,7 +925,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (int) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -943,7 +943,7 @@ public class MvpBundle {
 		}
 		try{
 			return (byte) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return 0;
 		}
 	}
@@ -963,7 +963,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (long) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -981,7 +981,7 @@ public class MvpBundle {
 		}
 		try{
 			return (double) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return 0.0;
 		}
 	}
@@ -1001,7 +1001,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (double) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -1021,7 +1021,7 @@ public class MvpBundle {
 		}
 		try{
 			return (String) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -1045,7 +1045,7 @@ public class MvpBundle {
 		try{
 			Object tmp = stub.get(key);
 			return (String) (tmp != null ? tmp : defaultValue);
-		} finally {
+		} catch(Exception e){
 			return defaultValue;
 		}
 	}
@@ -1065,7 +1065,7 @@ public class MvpBundle {
 		}
 		try{
 			return (boolean []) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -1085,7 +1085,7 @@ public class MvpBundle {
 		}
 		try{
 			return (int[]) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -1105,7 +1105,7 @@ public class MvpBundle {
 		}
 		try{
 			return (long[]) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -1125,7 +1125,7 @@ public class MvpBundle {
 		}
 		try{
 			return (double[]) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}
@@ -1145,7 +1145,7 @@ public class MvpBundle {
 		}
 		try{
 			return (String[]) stub.get(key);
-		} finally {
+		} catch(Exception e){
 			return null;
 		}
 	}

@@ -54,6 +54,8 @@ import com.github.nicktgn.mvp.MvpFragment;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.NotePresenter;
+import com.noveogroup.android.log.Logger;
+import com.noveogroup.android.log.LoggerManager;
 
 import butterknife.Bind;
 import butterknife.BindInt;
@@ -69,13 +71,7 @@ public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresen
 	NotePresenter.NoteCtx{
 
 
-	private static final String TAG = "NoteFragment";
-
-	public static NoteFragment newInstance(Bundle noteModel) {
-		NoteFragment fragment = new NoteFragment();
-		fragment.setArguments(noteModel);
-		return fragment;
-	}
+	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
 	@Bind(R.id.title_edit)
 	EditText mTitleEdit;
@@ -135,7 +131,7 @@ public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresen
 		public void afterTextChanged(Editable editable) {}
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			Log.d(TAG, "TEXT CHANGED: " + s + " (" + start + ", " + before + ", " + count + ")");
+			logger.d("TEXT CHANGED: " + s + " (" + start + ", " + before + ", " + count + ")");
 			presenter.saveContent(s.toString());
 		}
 	};

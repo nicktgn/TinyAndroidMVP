@@ -17,10 +17,14 @@
 package com.github.nicktgn.mvp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Abstract helper implementation of the View based on {@link Activity}. Actual view
@@ -63,6 +67,47 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
 				logger.d("Got some cached state data");
 			}
 		}
+	}
+
+	/**
+	 * Use this helper method to create an Intent for starting another View (Activity)
+	 * with extras containing provided arguments indented for Presenter of this new View
+	 * @param arguments arguments from this View's Presenter intended for Presenter of another View
+	 * @return intent to another View (Activity)
+	 */
+	protected Intent getMvpIntent(Class targetView, MvpBundle arguments){
+		Intent i = new Intent(this, targetView);
+		if(arguments != null){
+			Bundle bundle = new Bundle();
+			bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
+			i.putExtras(bundle);
+		}
+		return i;
+	}
+
+	/**
+	 * Use this helper method to get another View (Fragment)
+	 * with extras containing provided arguments indented for Presenter of this new View
+	 * @param arguments arguments from this View's Presenter intended for Presenter of another View
+	 * @return intent to another View (Activity) (or null if failed to instantiate)
+	 */
+	protected <T extends MvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
+		try {
+			T fragment = targetView.getConstructor().newInstance();
+			Bundle bundle = new Bundle();
+			bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
+			fragment.setArguments(bundle);
+			return fragment;
+		} catch (java.lang.InstantiationException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

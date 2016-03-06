@@ -23,6 +23,8 @@ import android.util.Log;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Abstract helper implementation of the View based on {@link Fragment}. Actual view
  * fragments can extend from this class.
@@ -33,41 +35,71 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter> ext
 	
 	protected P presenter;
 
+	MvpBundle stateData = null;
+	MvpBundle argumentsData = null;
+
+	/**
+	 * Use this helper method to get another View (Fragment)
+	 * with extras containing provided arguments indented for Presenter of this new View
+	 * @param arguments arguments from this View's Presenter intended for Presenter of another View
+	 * @return intent to another View (Activity) (or null if failed to instantiate)
+	 */
+	protected <T extends MvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
+		try {
+			T fragment = targetView.getConstructor().newInstance();
+			Bundle bundle = new Bundle();
+			bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
+			fragment.setArguments(bundle);
+			return fragment;
+		} catch (java.lang.InstantiationException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		logger.d("onActivityCreated");
 		presenter = createPresenter();
 
-		MvpBundle stateData = null;
-		MvpBundle argumentsData = null;
+
 
 		// ---- INPUT ARGUMENTS ---- //
-		try {
-			// first try to get input model data from fragment arguments
-			// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
-			// through presenter's constructor for example
+		if(argumentsData != null){
+			try {
+				// first try to get input model data from fragment arguments
+				// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
+				// through presenter's constructor for example
 
-			Bundle bundle = getArguments().getBundle(Constants.ARGUMENTS_DATA);
-			if(bundle != null) {
-				argumentsData = new MvpBundle(bundle);
-				logger.d("Got arguments data from fragment arguments");
-			}
-
-			// if noting found in arguments, try to get input model data from Intent
-			// (that started Activity hosting this Fragment)
-			// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
-			// through presenter's constructor for example
-			else{
-				bundle = getActivity().getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
+				Bundle bundle = getArguments().getBundle(Constants.ARGUMENTS_DATA);
 				if(bundle != null) {
 					argumentsData = new MvpBundle(bundle);
-					logger.d("Got argumnets data from intent");
+					logger.d("Got arguments data from fragment arguments");
 				}
+
+				// if noting found in arguments, try to get input model data from Intent
+				// (that started Activity hosting this Fragment)
+				// NOTE: you can still skip this convenience mechanism, and inject the data into presenter
+				// through presenter's constructor for example
+				else{
+					bundle = getActivity().getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
+					if(bundle != null) {
+						argumentsData = new MvpBundle(bundle);
+						logger.d("Got argumnets data from intent");
+					}
+				}
+			} catch(NullPointerException e){
+				logger.d("No arguments data");
 			}
-		} catch(NullPointerException e){
-			logger.d("No arguments data");
 		}
+
 
 		// ---- CACHING ---- //
 		// if we have savedInstanceState (activity was re-created)

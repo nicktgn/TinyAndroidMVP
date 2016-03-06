@@ -29,7 +29,7 @@ ext {
     siteUrl = 'https://github.com/nicktgn/TinyAndroidMVP'
     gitUrl = 'https://github.com/nicktgn/TinyAndroidMVP.git'
 
-    libraryVersion = '0.3.0'
+    libraryVersion = '0.3.1'
 
     developerId = 'nicktgn'
     developerName = 'Nick Tsygankov'

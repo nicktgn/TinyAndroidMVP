@@ -33,7 +33,7 @@ public class NotePresenter extends MvpBaseCtxPresenter<NotePresenter.NoteView, N
 
 	// use some tag for storing your model data in the Bundle
 	static final String DATA_NOTE_IDX = "data_note_idx";
-	static final String DATA_NOTEBOOK_IDX = "data_note_idx";
+	static final String DATA_NOTEBOOK_IDX = "data_notebook_idx";
 
 	static final String DATA_EDIT_HISTORY = "data_edit_history";
 
@@ -92,13 +92,13 @@ public class NotePresenter extends MvpBaseCtxPresenter<NotePresenter.NoteView, N
 	protected void present(MvpBundle arguments, MvpBundle savedState) {
 		if(mNote == null){
 			if(arguments != null){
-				notebookIdx = arguments.getInt(DATA_NOTEBOOK_IDX);
-				noteIdx = arguments.getInt(DATA_NOTE_IDX);
+				notebookIdx = arguments.getInt(DATA_NOTEBOOK_IDX, -1);
+				noteIdx = arguments.getInt(DATA_NOTE_IDX, -1);
 				logger.d("Got some input arguments");
 			}
 			else if(savedState != null){
-				notebookIdx = savedState.getInt(DATA_NOTEBOOK_IDX);
-				noteIdx = savedState.getInt(DATA_NOTE_IDX);
+				notebookIdx = savedState.getInt(DATA_NOTEBOOK_IDX, -1);
+				noteIdx = savedState.getInt(DATA_NOTE_IDX, -1);
 				mEditHistory = savedState.getParcelable(DATA_EDIT_HISTORY);
 				logger.d("Got some cached data");
 			}

@@ -34,7 +34,7 @@ public class MainPresenter extends MvpBasePresenter<MainPresenter.MainView> {
 		void showNumOfNotebooks(int numOfNotebooks);
 		void showNumOfNotes(int numOfNotes);
 		void showNotebooksList(int numOfNotebooks);
-		void gotoNotebook(MvpBundle notebook);
+		void gotoNotebookView(MvpBundle notebook);
 	}
 
 	public interface NotebookView extends MvpView{
@@ -84,13 +84,13 @@ public class MainPresenter extends MvpBasePresenter<MainPresenter.MainView> {
 		int notebookIdx = -1;
 		MvpBundle bundle = new MvpBundle();
 		bundle.putInt(NotebookPresenter.DATA_NOTEBOOK_IDX, notebookIdx);
-		getView().gotoNotebook(bundle);
+		getView().gotoNotebookView(bundle);
 	}
 
 	public void openNotebook(int index){
 		MvpBundle bundle = new MvpBundle();
 		bundle.putInt(NotebookPresenter.DATA_NOTEBOOK_IDX, index);
-		getView().gotoNotebook(bundle);
+		getView().gotoNotebookView(bundle);
 	}
 
 	public void removeNotebook(int index){

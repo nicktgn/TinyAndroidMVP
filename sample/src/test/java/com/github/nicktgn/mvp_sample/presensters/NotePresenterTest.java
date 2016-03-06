@@ -17,25 +17,20 @@
 package com.github.nicktgn.mvp_sample.presensters;
 
 
-import android.os.Bundle;
 
+import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp_sample.models.NoteModel;
 import com.github.nicktgn.mvp_sample.models.NotebookModel;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
-import com.github.nicktgn.mvp_sample.ui.NotebookFragment;
-import com.github.nicktgn.mvp_sample.utils.EditHistory;
 
 import org.junit.Test;
 import org.mockito.InOrder;
-
-import de.greenrobot.event.EventBus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
@@ -46,8 +41,11 @@ import static org.mockito.Mockito.withSettings;
  */
 public class NotePresenterTest {
 
-	private static final int DEF_NOTEBOOK_IDX = 0;
-	private static final int DEF_NOTE_IDX = 0;
+	private static final int DEF_NOTEBOOK_IDX = -1;
+	private static final int DEF_NOTE_IDX = -1;
+
+	private static final int NOTEBOOK_IDX = 0;
+	private static final int NOTE_IDX = 0;
 
 	private static final int DEF_MAX_HISTORY_SIZE = 20;
 	private static final int MAX_HISTORY_SIZE_OF_2 = 2;
@@ -69,7 +67,7 @@ public class NotePresenterTest {
 	NotebooksProvider mockedNotebookProvider;
 	NotebookModel mockedNotebook;
 	NoteModel mockedNote;
-	Bundle mockedArguments;
+	MvpBundle arguments;
 	//Bundle mockedState;
 	NotePresenter np;
 
@@ -89,14 +87,19 @@ public class NotePresenterTest {
 		when(mockedNote.getContent()).thenReturn(DEF_CONTENT);
 
 		mockedNotebook = mock(NotebookModel.class);
-		when(mockedNotebook.getNote(DEF_NOTE_IDX)).thenReturn(mockedNote);
+		when(mockedNotebook.getNote(NOTE_IDX)).thenReturn(mockedNote);
+		when(mockedNotebook.getNumNotes()).thenReturn(1);
 
 		mockedNotebookProvider = mock(NotebooksProvider.class);
-		when(mockedNotebookProvider.getNotebook(DEF_NOTEBOOK_IDX)).thenReturn(mockedNotebook);
+		when(mockedNotebookProvider.getNotebook(NOTEBOOK_IDX)).thenReturn(mockedNotebook);
+		when(mockedNotebookProvider.getNumNotebooks()).thenReturn(1);
 
-		mockedArguments = mock(Bundle.class);
-		when(mockedArguments.getInt(NotePresenter.DATA_NOTEBOOK_IDX)).thenReturn(DEF_NOTEBOOK_IDX);
-		when(mockedArguments.getInt(NotePresenter.DATA_NOTE_IDX)).thenReturn(DEF_NOTE_IDX);
+		//mockedArguments = new MvpBundle();
+		//when(mockedArguments.getInt(NotePresenter.DATA_NOTEBOOK_IDX)).thenReturn(DEF_NOTEBOOK_IDX);
+		//when(mockedArguments.getInt(NotePresenter.DATA_NOTE_IDX)).thenReturn(DEF_NOTE_IDX);
+		arguments = new MvpBundle();
+		arguments.putInt(NotePresenter.DATA_NOTEBOOK_IDX, NOTEBOOK_IDX);
+		arguments.putInt(NotePresenter.DATA_NOTE_IDX, NOTE_IDX);
 	}
 
 	@Test
@@ -118,12 +121,12 @@ public class NotePresenterTest {
 
 		// given
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		when(mockedArguments.getInt(NotePresenter.DATA_NOTEBOOK_IDX)).thenReturn(-1);
-		when(mockedArguments.getInt(NotePresenter.DATA_NOTE_IDX)).thenReturn(-1);
+		arguments.putInt(NotePresenter.DATA_NOTEBOOK_IDX, DEF_NOTEBOOK_IDX);
+		arguments.putInt(NotePresenter.DATA_NOTE_IDX, DEF_NOTE_IDX);
 
 		// when
 		try {
-			np.attachView(mockedNoteView, mockedArguments, null);
+			np.attachView(mockedNoteView, arguments, null);
 			failBecauseExceptionWasNotThrown(Exception.class);
 		} catch(Exception e){
 
@@ -140,7 +143,7 @@ public class NotePresenterTest {
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
 
 		// when
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// should
 		verify(mockedNoteView).showTitle(DEF_TITLE);
@@ -158,7 +161,7 @@ public class NotePresenterTest {
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
 
 		// when
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// should
 		verify(mockedNoteView).startEditingTitle();
@@ -174,7 +177,7 @@ public class NotePresenterTest {
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
 
 		// when
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// should
 		verify(mockedNoteView).startEditingTitle();
@@ -191,7 +194,7 @@ public class NotePresenterTest {
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
 
 		// when
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// should
 		verify(mockedNoteView, never()).startEditingTitle();
@@ -204,15 +207,36 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(NOT_DEF_CONTENT);
 
+		when(mockedNote.getContent()).thenReturn(NOT_DEF_CONTENT);
+
 		// when
-		Bundle b = np.saveState();
+		MvpBundle state = np.saveState();
 		np.detachView(false);
 
+		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
+		np.attachView(mockedNoteView, null, state);
 
-		//
+
+		InOrder inOrder = inOrder(mockedNoteView);
+		InOrder inOrder1 = inOrder(mockedNoteView);
+		InOrder inOrder2 = inOrder(mockedNoteView);
+		InOrder inOrder3 = inOrder(mockedNoteView);
+
+		// should
+		inOrder.verify(mockedNoteView).showTitle(DEF_TITLE);
+		inOrder1.verify(mockedNoteView).showContent(NOT_DEF_CONTENT);
+		inOrder2.verify(mockedNoteView).enableUndo(true);
+		inOrder3.verify(mockedNoteView).enableRedo(false);
+
+		np.undoContentEdit();
+
+		inOrder1.verify(mockedNoteView).showContent(DEF_CONTENT);
+		inOrder2.verify(mockedNoteView).enableUndo(false);
+		inOrder3.verify(mockedNoteView).enableRedo(true);
+
 	}
 
 	@Test
@@ -220,7 +244,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// when
 		np.saveTitle(NOT_DEF_TITLE);
@@ -235,7 +259,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// when
 		np.saveContent(NOT_DEF_CONTENT);
@@ -252,7 +276,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// when
 		try{
@@ -283,7 +307,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 
 		// ### Because enableUndo and enableRedo are going to be also called when view is attached
 		// ### In future no need for these explanations, it might! be a good practice to clear invocations
@@ -307,7 +331,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(NOT_DEF_CONTENT);
 
 		clearInvocations(mockedNoteView);
@@ -327,7 +351,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(NOT_DEF_CONTENT);
 		np.undoContentEdit();
 
@@ -351,7 +375,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(CONTENT_1);
 		np.saveContent(CONTENT_12);
 
@@ -372,7 +396,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(CONTENT_1);
 		np.saveContent(CONTENT_12);
 
@@ -404,7 +428,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(CONTENT_1);
 		np.saveContent(CONTENT_12);
 		np.undoContentEdit();
@@ -436,7 +460,7 @@ public class NotePresenterTest {
 		// given
 		given_defaults();
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(CONTENT_1);
 		np.saveContent(CONTENT_12);
 		np.undoContentEdit();
@@ -471,7 +495,7 @@ public class NotePresenterTest {
 		given_defaults();
 		when(mockedNoteCtx.getDefaultMaxHistorySize()).thenReturn(MAX_HISTORY_SIZE_OF_2);
 		np = new NotePresenter(mockedNoteCtx, mockedNotebookProvider);
-		np.attachView(mockedNoteView, mockedArguments, null);
+		np.attachView(mockedNoteView, arguments, null);
 		np.saveContent(CONTENT_1);
 		np.saveContent(CONTENT_12);
 
