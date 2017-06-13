@@ -412,6 +412,9 @@ public class NotePresenterTest {
 		np.undoContentEdit();
 		np.undoContentEdit();
 
+		verify(mockedNoteView).enableRedo(true);
+		verify(mockedNoteView).enableRedo(true);
+
 		// should
 		inOrder.verify(mockedNoteView).showContent(CONTENT_1);
 		inOrder2.verify(mockedNoteView).enableUndo(true);

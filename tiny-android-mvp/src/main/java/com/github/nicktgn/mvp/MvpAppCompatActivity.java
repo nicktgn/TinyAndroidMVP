@@ -43,7 +43,8 @@ public abstract class MvpAppCompatActivity<V extends MvpView, P extends MvpPrese
 	private MvpBundle stateData;
 	private MvpBundle argumentsData;
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		logger.d("Presenter is null: " + (presenter == null));
 		presenter = createPresenter();
