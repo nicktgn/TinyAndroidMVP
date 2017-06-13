@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.nicktgn.mvp:tiny-android-mvp:0.3.1'
+    compile 'com.github.nicktgn.mvp:tiny-android-mvp:0.4.0'
 }
 ```
 
