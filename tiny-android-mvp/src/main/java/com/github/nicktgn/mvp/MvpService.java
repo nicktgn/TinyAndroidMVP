@@ -55,6 +55,10 @@ public abstract class MvpService<V extends MvpView, P extends MvpPresenter>
                 logger.d("Got some cached state data");
             }
         }*/
+
+        if(!attachOnStartCommand()){
+            presenter.attachView(this, argumentsData, stateData);
+        }
     }
 
     @Override
@@ -71,9 +75,21 @@ public abstract class MvpService<V extends MvpView, P extends MvpPresenter>
             logger.d("No intent data");
         }
 
-        presenter.attachView(this, argumentsData, stateData);
+        if(attachOnStartCommand()){
+            presenter.attachView(this, argumentsData, stateData);
+        }
 
         return START_NOT_STICKY;
+    }
+
+    /**
+     * By default view attaches itself in onCreate() and detaches itself in onDestroy().
+     * You can override this method to change this behaviour and instead to attach in
+     * onStartCommand() and detach in onDestroy()
+     * @return true to attach in onStartCommand() and detach in onDestroy()
+     */
+    protected boolean attachOnStartCommand(){
+        return false;
     }
 
     @Override
