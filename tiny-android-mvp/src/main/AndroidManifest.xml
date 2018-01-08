@@ -17,6 +17,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.github.nicktgn.mvp">
 
-    <library></library>
+    <!--<library></library>-->
 
 </manifest>

@@ -29,7 +29,7 @@ ext {
     siteUrl = 'https://github.com/nicktgn/TinyAndroidMVP'
     gitUrl = 'https://github.com/nicktgn/TinyAndroidMVP.git'
 
-    libraryVersion = '0.4.1'
+    libraryVersion = '0.4.2'
 
     developerId = 'nicktgn'
     developerName = 'Nick Tsygankov'
@@ -42,7 +42,7 @@ ext {
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 9
@@ -59,12 +59,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:22.2.1'
     //compile 'com.android.support:support-annotations:25.3.1'
 
-    compile 'com.noveogroup.android:android-logger-multi:1.4.0-multi'
+    implementation 'com.noveogroup.android:android-logger-multi:1.4.0-multi'
 }
 
 // COMMENT if not in developer mode: upload to bintray
