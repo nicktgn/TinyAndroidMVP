@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/sample" />
             <option value="$PROJECT_DIR$/tiny-android-mvp" />
+            <option value="$PROJECT_DIR$/tiny-android-mvp-annotations" />
+            <option value="$PROJECT_DIR$/tiny-android-mvp-processor" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

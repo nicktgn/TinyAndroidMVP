@@ -30,13 +30,14 @@ import android.widget.TextView;
 
 import com.github.nicktgn.mvp.MvpAppCompatActivity;
 import com.github.nicktgn.mvp.MvpBundle;
+import com.github.nicktgn.mvp.annotations.MyAnnotation;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.MainPresenter;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -45,16 +46,20 @@ public class MainActivity extends MvpAppCompatActivity<MainPresenter.MainView, M
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
-	@Bind(R.id.notebooks_list) RecyclerView mNotebooksList;
-	@Bind(R.id.num_notebooks_txt) TextView mNumNotebooksTxt;
-	@Bind(R.id.total_num_notes_txt) TextView mTotalNumNotesTxt;
-	@Bind(R.id.notebooks_list_empty_view) View mNotebooksListEmptyView;
+	@BindView(R.id.notebooks_list) RecyclerView mNotebooksList;
+	@BindView(R.id.num_notebooks_txt) TextView mNumNotebooksTxt;
+	@BindView(R.id.total_num_notes_txt) TextView mTotalNumNotesTxt;
+	@BindView(R.id.notebooks_list_empty_view) View mNotebooksListEmptyView;
 
-	@Bind(R.id.add_new_notebook_btn) View mAddNotebookBtn;
+	@BindView(R.id.add_new_notebook_btn) View mAddNotebookBtn;
 
-	@Bind(R.id.toolbar) Toolbar mToolbar;
+	@BindView(R.id.toolbar) Toolbar mToolbar;
 
 	private NotebooksListAdapter mAdapter;
+
+
+	@MyAnnotation
+	protected String name;
 
 
 	@Override
@@ -160,8 +165,8 @@ public class MainActivity extends MvpAppCompatActivity<MainPresenter.MainView, M
 																View.OnClickListener{
 			public int index;
 
-			@Bind(R.id.title_txt) TextView title;
-			@Bind(R.id.num_notes_txt)TextView numNotes;
+			@BindView(R.id.title_txt) TextView title;
+			@BindView(R.id.num_notes_txt)TextView numNotes;
 
 			public SimpleViewHolder(View itemView) {
 				super(itemView);

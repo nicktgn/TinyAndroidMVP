@@ -51,7 +51,7 @@ import com.github.nicktgn.mvp_sample.presensters.MainPresenter;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 
@@ -59,7 +59,7 @@ public class NotebookActivity extends AppCompatActivity {
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
-	@Bind(R.id.toolbar) Toolbar mToolbar;
+	@BindView(R.id.toolbar) Toolbar mToolbar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

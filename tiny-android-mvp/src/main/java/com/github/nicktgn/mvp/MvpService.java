@@ -19,6 +19,7 @@ package com.github.nicktgn.mvp;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
@@ -119,7 +120,7 @@ public abstract class MvpService<V extends MvpView, P extends MvpPresenter>
      * @param arguments arguments from this View's Presenter intended for Presenter of another View
      * @return intent to another View (Activity) (or null if failed to instantiate)
      */
-    protected <T extends MvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
+    protected <T extends Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
         try {
             T fragment = targetView.getConstructor().newInstance();
             Bundle bundle = new Bundle();

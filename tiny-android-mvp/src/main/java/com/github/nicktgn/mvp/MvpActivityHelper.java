@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Nick Tsygankov (nicktgn@gmail.com)
+ * Copyright $year  Nick Tsygankov (nicktgn@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@
 package com.github.nicktgn.mvp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
@@ -27,29 +31,28 @@ import com.noveogroup.android.log.LoggerManager;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Abstract helper implementation of the View based on {@link Activity}. Actual view
+ * Abstract helper implementation of the View based on {@link AppCompatActivity}. Actual view
  * activities can extend from this class.
  * @author nicktgn
  */
-public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
-							extends Activity
-							implements MvpView {
+public class MvpActivityHelper<AV extends Activity & IMvpActivity, P extends MvpPresenter> {
 
-	private static final Logger logger = LoggerManager.getLogger(MvpActivity.class.getName());
+	private static final Logger logger = LoggerManager.getLogger(MvpActivityHelper.class.getName());
 
 	protected P presenter;
 
-	private MvpBundle argumentsData;
 	private MvpBundle stateData;
+	private MvpBundle argumentsData;
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		presenter = createPresenter();
+	private boolean mAttachOnResume = false;
+
+	protected void onCreate(AV activityView, Bundle savedInstanceState, P presenter) {
+		this.presenter = presenter;
 
 		// ---- INPUT ARGUMENTS ---- //
 		// try to get input model data from Intent (that started this Activity)
 		try {
-			Bundle bundle = getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
+			Bundle bundle = activityView.getIntent().getExtras().getBundle(Constants.ARGUMENTS_DATA);
 			if(bundle != null){
 				argumentsData = new MvpBundle(bundle);
 				logger.d("Got some arguments data");
@@ -67,6 +70,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
 				logger.d("Got some cached state data");
 			}
 		}
+
 	}
 
 	/**
@@ -75,13 +79,11 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
 	 * @param arguments arguments from this View's Presenter intended for Presenter of another View
 	 * @return intent to another View (Activity)
 	 */
-	protected Intent getMvpIntent(Class targetView, MvpBundle arguments){
-		Intent i = new Intent(this, targetView);
-		if(arguments != null){
-			Bundle bundle = new Bundle();
-			bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
-			i.putExtras(bundle);
-		}
+	public Intent getMvpIntent(Context context, Class targetView, MvpBundle arguments){
+		Intent i = new Intent(context, targetView);
+		Bundle bundle = new Bundle();
+		bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
+		i.putExtras(bundle);
 		return i;
 	}
 
@@ -91,7 +93,27 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
 	 * @param arguments arguments from this View's Presenter intended for Presenter of another View
 	 * @return intent to another View (Activity) (or null if failed to instantiate)
 	 */
-	protected <T extends Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
+	public <T extends Fragment & IMvpFragment> T getMvpFragmentCompat(Class<T> targetView, MvpBundle arguments){
+		try {
+			T fragment = targetView.getConstructor().newInstance();
+			Bundle bundle = new Bundle();
+			bundle.putBundle(Constants.ARGUMENTS_DATA, arguments.getRealBundle());
+			fragment.setArguments(bundle);
+			return fragment;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+	public <T extends android.app.Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments){
 		try {
 			T fragment = targetView.getConstructor().newInstance();
 			Bundle bundle = new Bundle();
@@ -116,61 +138,57 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter>
 	 * onResume() and detach in onPause()
 	 * @return true to attach in onResume() and detach in onPause()
 	 */
-	protected boolean attachOnResume(){
-		return false;
+	public synchronized void setAttachOnResume(boolean attachOnResume){
+		mAttachOnResume = attachOnResume;
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
+	public boolean getAttachOnResume(){
+		return mAttachOnResume;
+	}
 
-		if(!attachOnResume()){
+
+	public void onStart(AV activityView) {
+		logger.d("onStart");
+
+		if(!mAttachOnResume){
 			// View is attached in onStart() or in onResume() because in attachView() we already need all the elements of the View
 			// need to be prepared for use (usually done in onCreate()).
-			presenter.attachView(this, argumentsData, stateData);
+			presenter.attachView(activityView, argumentsData, stateData);
 		}
 	}
 
-	@Override
-	protected void onResume(){
-		super.onResume();
+	public void onResume(AV activityView){
+		logger.d("onResume");
 
-		if(attachOnResume()){
+		if(mAttachOnResume){
 			// View is attached in onStart() or in onResume() because in attachView() we already need all the elements of the View
 			// need to be prepared for use (usually done in onCreate()).
-			presenter.attachView(this, argumentsData, stateData);
+			presenter.attachView(activityView, argumentsData, stateData);
 		}
 	}
 
-	@Override
-	protected void onPause(){
-		if(attachOnResume()){
+	public void onPause(){
+		logger.d("onPause");
+
+		if(mAttachOnResume) {
 			presenter.detachView(false);
 		}
-		super.onPause();
 	}
 
-	@Override
-	protected void onStop() {
-		if(!attachOnResume()){
+	public void onStop() {
+		logger.d("onStop");
+
+		if(!mAttachOnResume){
 			presenter.detachView(false);
 		}
-		super.onStop();
 	}
 
-	/**
-	 * Creates Presenter instance
-	 * @return new Presenter instance
-	 */
-	abstract protected P createPresenter();
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState) {
+		logger.d("onSaveInstanceState");
 		MvpBundle savedData = presenter.saveState();
 		if(savedData != null){
 			outState.putBundle(Constants.CACHED_STATE_DATA, savedData.getRealBundle());
 		}
-		super.onSaveInstanceState(outState);
 	}
 
 }

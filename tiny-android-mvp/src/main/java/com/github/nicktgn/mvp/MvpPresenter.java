@@ -18,6 +18,8 @@ package com.github.nicktgn.mvp;
 
 import android.os.Bundle;
 
+import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
+
 /**
  * Basic Presenter interface
  * @author nicktgn
@@ -51,7 +53,7 @@ public interface MvpPresenter<V extends MvpView> {
 	 * Get the {@link Bundle} with state data operated by Presenter.
 	 * This {@link Bundle} can be used to save/restore Model data between destruction and re-creation of
 	 * the Views. <br/>
-	 * See source of {@link MvpAppCompatActivity} and {@link MvpFragment} for
+	 * See source of {@link MvpAppCompatActivity} and {@link MVPFragmentCompat} for
 	 * an example of how to save/restore Presenter state. <br/>
 	 * Common places to use this:<br/>
 	 * <ul>

@@ -1,1 +1,1 @@
-include ':tiny-android-mvp', ':sample'
+include ':tiny-android-mvp', ':sample', ':tiny-android-mvp-processor', ':tiny-android-mvp-annotations'

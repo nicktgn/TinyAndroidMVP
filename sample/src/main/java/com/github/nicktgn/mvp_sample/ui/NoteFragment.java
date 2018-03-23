@@ -40,52 +40,50 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.github.nicktgn.mvp.MvpFragment;
+import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.NotePresenter;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 
-import butterknife.Bind;
 import butterknife.BindInt;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresenter>
+
+@MVPFragmentCompat(Fragment.class)
+public class NoteFragment {
+	/*extends MvpFragmentCompat<NotePresenter.NoteView, NotePresenter>
 	implements NotePresenter.NoteView,
 	NotePresenter.NoteCtx{
 
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
-	@Bind(R.id.title_edit)
-	EditText mTitleEdit;
-	@Bind(R.id.content_edit)
-	EditText mContentEdit;
-	@Bind(R.id.edit_tools)
-	Toolbar mEditTools;
-	@Bind(R.id.edit_tools_menu)
-	ActionMenuView mEditToolsMenu;
+	@BindView(R.id.title_edit) EditText mTitleEdit;
+	@BindView(R.id.content_edit) EditText mContentEdit;
+	@BindView(R.id.edit_tools) Toolbar mEditTools;
+	@BindView(R.id.edit_tools_menu) ActionMenuView mEditToolsMenu;
 
 	@BindString(R.string.default_note_name)
 	String mDefaultNoteNameRes;
 	@BindInt(R.integer.default_max_editing_history_size)
 	int mDefaultMaxEditingHistorySize;
+	private Unbinder unbinder;
 
 	public NoteFragment() {
 		// Required empty public constructor
@@ -97,7 +95,7 @@ public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresen
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_note, container, false);
 
-		ButterKnife.bind(this, v);
+		unbinder = ButterKnife.bind(this, v);
 
 		mEditTools.setTitle(null);
 
@@ -182,7 +180,7 @@ public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresen
 
 
 	@Override
-	protected NotePresenter createPresenter() {
+	protected NotePresenter getPresenter() {
 		return new NotePresenter(this, NotebooksProvider.getInstance());
 	}
 
@@ -238,8 +236,8 @@ public class NoteFragment extends MvpFragment<NotePresenter.NoteView, NotePresen
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
-
+  */
 }

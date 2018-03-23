@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,33 +31,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.nicktgn.mvp.IMvpFragment;
 import com.github.nicktgn.mvp.MvpBundle;
-import com.github.nicktgn.mvp.MvpFragment;
+import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.presensters.NotebookPresenter;
 import com.noveogroup.android.log.Logger;
 import com.noveogroup.android.log.LoggerManager;
 
-import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import de.greenrobot.event.EventBus;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView, NotebookPresenter>
+
+@MVPFragmentCompat(Fragment.class)
+public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.NotebookView, NotebookPresenter>
 										implements NotebookPresenter.NotebookView,
 														NotebookPresenter.NotebookCtx{
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
-	@Bind(R.id.add_new_note_btn) View mAddNoteBtn;
-	@Bind(R.id.notes_list_empty_view) View mNotesListEmptyView;
-	@Bind(R.id.notes_list) RecyclerView mNotesList;
+	@BindView(R.id.add_new_note_btn) View mAddNoteBtn;
+	@BindView(R.id.notes_list_empty_view) View mNotesListEmptyView;
+	@BindView(R.id.notes_list) RecyclerView mNotesList;
 
 	@BindString(R.string.default_note_name) String defaultNoteName;
 	@BindString(R.string.default_notebook_name) String defaultNotebookName;
@@ -66,6 +69,8 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 
 
 	private NotesListAdapter mAdapter;
+	private Unbinder unbinder;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +78,7 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_notebook, container, false);
 
-		ButterKnife.bind(this, v);
+		unbinder = ButterKnife.bind(this, v);
 
 		final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 		mNotesList.setLayoutManager(layoutManager);
@@ -108,7 +113,7 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		ButterKnife.unbind(this);
+		unbinder.unbind();
 	}
 
 	@Override
@@ -200,8 +205,8 @@ public class NotebookFragment extends MvpFragment<NotebookPresenter.NotebookView
 
 			public int index;
 
-			@Bind(R.id.title_txt) TextView title;
-			@Bind(R.id.content_txt) TextView content;
+			@BindView(R.id.title_txt) TextView title;
+			@BindView(R.id.content_txt) TextView content;
 
 			public SimpleViewHolder(View itemView) {
 				super(itemView);

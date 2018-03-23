@@ -30,7 +30,8 @@ public abstract class MvpBasePresenter<V extends MvpView>
 						implements MvpPresenter<V>{
 
 	WeakReference<V> viewRef;
-	
+
+
 	@Override
 	public void attachView(V view, MvpBundle arguments, MvpBundle savedState) {
 		if(view == null){
@@ -80,6 +81,7 @@ public abstract class MvpBasePresenter<V extends MvpView>
 	protected V getView() {
 		return viewRef == null ? null : viewRef.get();
 	}
+
 
 	@Override
 	public boolean isViewAttached() {

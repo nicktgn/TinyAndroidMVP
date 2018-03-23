@@ -22,6 +22,7 @@ import com.github.nicktgn.mvp.MvpBaseCtxPresenter;
 import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp.MvpContext;
 import com.github.nicktgn.mvp.MvpView;
+import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
 import com.github.nicktgn.mvp_sample.models.NoteModel;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
 import com.github.nicktgn.mvp_sample.utils.EditHistory;
@@ -67,7 +68,7 @@ public class NotePresenter extends MvpBaseCtxPresenter<NotePresenter.NoteView, N
 	 * Model data can also be injected directly to the presenter through constructor,
 	 * or any other conventional means, instead of reading the intent or fragment arguments
 	 * (see source of {@link com.github.nicktgn.mvp.MvpActivity#onCreate(Bundle)} or
-	 * {@link com.github.nicktgn.mvp.MvpFragment#onActivityCreated(Bundle)})
+	 * {@link MVPFragmentCompat#onActivityCreated(Bundle)})
 	 * @param noteModel
 	 */
 	public NotePresenter(NoteCtx ctx, NoteModel noteModel) {
