@@ -47,6 +47,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.github.nicktgn.mvp.IMvpFragment;
+import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
 import com.github.nicktgn.mvp_sample.R;
 import com.github.nicktgn.mvp_sample.models.NotebooksProvider;
@@ -66,10 +68,10 @@ import butterknife.Unbinder;
  */
 
 @MVPFragmentCompat(Fragment.class)
-public class NoteFragment {
-	/*extends MvpFragmentCompat<NotePresenter.NoteView, NotePresenter>
-	implements NotePresenter.NoteView,
-	NotePresenter.NoteCtx{
+public class NoteFragment extends Fragment
+                        implements IMvpFragment<NotePresenter>,
+                                    NotePresenter.NoteView,
+                                    NotePresenter.NoteCtx{
 
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
@@ -130,7 +132,7 @@ public class NoteFragment {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 			logger.d("TEXT CHANGED: " + s + " (" + start + ", " + before + ", " + count + ")");
-			presenter.saveContent(s.toString());
+			getPresenter().saveContent(s.toString());
 		}
 	};
 
@@ -149,7 +151,7 @@ public class NoteFragment {
 	// so might as well use ButterKnife binding for this one
 	@OnTextChanged(R.id.title_edit)
 	public void onTitleChanged(CharSequence s) {
-		presenter.saveTitle(s.toString());
+		getPresenter().saveTitle(s.toString());
 	}
 
 	@Override
@@ -162,26 +164,20 @@ public class NoteFragment {
 			case R.id.action_undo:
 				mContentEdit.removeTextChangedListener(contentWatcher);
 				mContentEdit.addTextChangedListener(cursorWatcher);
-				presenter.undoContentEdit();
+				getPresenter().undoContentEdit();
 				mContentEdit.removeTextChangedListener(cursorWatcher);
 				mContentEdit.addTextChangedListener(contentWatcher);
 				break;
 			case R.id.action_redo:
 				mContentEdit.removeTextChangedListener(contentWatcher);
 				mContentEdit.addTextChangedListener(cursorWatcher);
-				presenter.redoContentEdit();
+				getPresenter().redoContentEdit();
 				mContentEdit.addTextChangedListener(contentWatcher);
 				mContentEdit.removeTextChangedListener(cursorWatcher);
 				break;
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-
-	@Override
-	protected NotePresenter getPresenter() {
-		return new NotePresenter(this, NotebooksProvider.getInstance());
 	}
 
 	@Override
@@ -239,5 +235,4 @@ public class NoteFragment {
 		unbinder.unbind();
 	}
 
-  */
 }

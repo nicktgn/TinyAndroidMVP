@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.nicktgn.mvp_sample.ui;
+package com.github.nicktgn.mvp;
 
-
-import android.support.v4.app.DialogFragment;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.github.nicktgn.mvp.IIMvpFragment;
-import com.github.nicktgn.mvp.IMvpFragment;
-import com.github.nicktgn.mvp.MvpBundle;
-import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
-import com.github.nicktgn.mvp_sample.presensters.NotePresenter;
-
 /**
- * Created by nick on 22/03/2018.
+ * Created by nick on 23/03/2018.
  */
 
+public interface IIMvpFragment<V extends MvpView, P extends MvpPresenter> extends MvpView {
 
-public class TestFragment {
+    P createPresenter();
+    P getPresenter();
 
-
+    <T extends android.app.Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments);
+    <T extends Fragment & IMvpFragment> T getMvpFragmentCompat(Class<T> targetView, MvpBundle arguments);
 }

@@ -19,7 +19,7 @@ package com.github.nicktgn.mvp;
 
 import android.support.v4.app.Fragment;
 
-public interface IMvpFragment extends MvpView {
+public interface IMvpFragment<P extends MvpPresenter> extends MvpView {
 
 	<T extends Fragment & IMvpFragment> T getMvpFragmentCompat(Class<T> targetView, MvpBundle arguments);
 	<T extends android.app.Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments);

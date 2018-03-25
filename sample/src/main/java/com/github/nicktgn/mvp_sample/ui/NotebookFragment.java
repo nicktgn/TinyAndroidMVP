@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.nicktgn.mvp.IIMvpFragment;
 import com.github.nicktgn.mvp.IMvpFragment;
 import com.github.nicktgn.mvp.MvpBundle;
 import com.github.nicktgn.mvp.annotations.MVPFragmentCompat;
@@ -53,9 +54,10 @@ import de.greenrobot.event.EventBus;
  */
 
 @MVPFragmentCompat(Fragment.class)
-public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.NotebookView, NotebookPresenter>
-										implements NotebookPresenter.NotebookView,
-														NotebookPresenter.NotebookCtx{
+public class NotebookFragment extends Fragment//MvpFragmentCompat<NotebookPresenter.NotebookView, NotebookPresenter>
+										implements IMvpFragment<NotebookPresenter>,
+													NotebookPresenter.NotebookView,
+													NotebookPresenter.NotebookCtx{
 
 	private static final Logger logger = LoggerManager.getLogger(MainActivity.class.getName());
 
@@ -70,6 +72,8 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 
 	private NotesListAdapter mAdapter;
 	private Unbinder unbinder;
+
+	private NotebookPresenter presenter;
 
 
 	@Override
@@ -103,11 +107,19 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_new_note:
-				presenter.createNote(defaultNoteName);
+				getPresenter().createNote(defaultNoteName);
 				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public NotebookPresenter getPresenter() {
+		if(presenter == null){
+			presenter = new NotebookPresenter(this, NotebooksProvider.getInstance());
+		}
+		return presenter;
 	}
 
 	@Override
@@ -117,13 +129,18 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 	}
 
 	@Override
-	protected NotebookPresenter createPresenter() {
-		return new NotebookPresenter(this, NotebooksProvider.getInstance());
+	public <T extends android.app.Fragment & IMvpFragment> T getMvpFragment(Class<T> targetView, MvpBundle arguments) {
+		return null;
+	}
+
+	@Override
+	public <T extends Fragment & IMvpFragment> T getMvpFragmentCompat(Class<T> targetView, MvpBundle arguments) {
+		return null;
 	}
 
 	@OnClick(R.id.add_new_note_btn)
 	public void onAddNewNote(View view) {
-		presenter.createNote(defaultNoteName);
+		getPresenter().createNote(defaultNoteName);
 	}
 
 	@Override
@@ -169,7 +186,7 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 
 	@Override
 	public void gotoNoteView(MvpBundle noteModel) {
-		EventBus.getDefault().post(new EventOpenNote(getMvpFragment(NoteFragment.class, noteModel)));
+		EventBus.getDefault().post(new EventOpenNote(getMvpFragmentCompat(NoteFragment.class, noteModel)));
 	}
 
 	public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
@@ -218,7 +235,7 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 
 			@Override
 			public void onClick(View view) {
-				presenter.openNote(index);
+				getPresenter().openNote(index);
 			}
 
 			@Override
@@ -258,7 +275,7 @@ public class NotebookFragment extends MvpFragmentCompat<NotebookPresenter.Notebo
 			// just call presenter to present this list item as "subview" and
 			// presenter will provide all necessary data to the viewHolder
 			// (if it implements "subview" interface)
-			presenter.presentSubView(viewHolder, position);
+			getPresenter().presentSubView(viewHolder, position);
 		}
 
 		@Override
